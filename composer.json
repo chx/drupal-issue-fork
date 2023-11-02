@@ -1,0 +1,27 @@
+{
+    "name": "chx/drupal-issue-fork",
+    "description": "Sets up a project to use an issue fork",
+    "type": "composer-plugin",
+    "require": {
+        "composer-plugin-api": "^2.0",
+        "php": ">=8.1.0"
+    },
+    "require-dev": {
+        "composer/composer": "^2.6"
+    },
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Karoly Negyesi",
+            "email": "chx1975@gmail.com"
+        }
+    ],
+    "extra": {
+        "class": "chx\\Composer\\Plugin\\DrupalIssueFork"
+    },
+    "autoload": {
+        "psr-4": {
+            "chx\\Composer\\": "src"
+        }
+    }
+}
