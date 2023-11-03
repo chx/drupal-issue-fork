@@ -26,15 +26,15 @@ class DrupalIssueForkCommand extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = $this->getIO();
-        if (!preg_match('#(?P<path>/issue/(?P<project>.*)-\d+)/-/tree/(?P<branch>.*)$#', $input->getArgument('fork-url'), $matches)) {
+        if (!preg_match('#(?P<url>https://git.drupalcode.org/issue/(?P<project>.*)-\d+)/-/tree/(?P<branch>.*)$#', $input->getArgument('fork-url'), $matches)) {
             $io->writeError("Can't parse URL argument, it should be something like https://git.drupalcode.org/issue/brandfolder-3286340/-/tree/3286340-automated-drupal-10\n");
             return 1;
         }
-        ['project' => $project, 'path' => $path, 'branch' => $branch] = $matches;
+        ['project' => $project, 'url' => $url, 'branch' => $branch] = $matches;
         $project = "drupal/$project";
         $forkRepository = [
             'type' => 'git',
-            'url' =>  "https://git.drupalcode.org/$path.git",
+            'url' =>  "$url.git",
         ];
         $found = FALSE;
         $fileName = Factory::getComposerFile();
@@ -56,7 +56,7 @@ class DrupalIssueForkCommand extends BaseCommand
         return 0;
     }
 
-    private function writeConfig($file, $config) {
+    protected function writeConfig($file, $config) {
         // Copy-paste from JsonConfigSource.
         foreach (['require', 'require-dev', 'conflict', 'provide', 'replace', 'suggest', 'config', 'autoload', 'autoload-dev', 'scripts', 'scripts-descriptions', 'support'] as $prop) {
             if (isset($config[$prop]) && $config[$prop] === []) {
