@@ -23,7 +23,7 @@ class DrupalIssueUnForkCommand extends DrupalIssueForkCommand
             ]);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = $this->getIO();
         $project = $input->getArgument('drupal-project');
