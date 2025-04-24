@@ -23,7 +23,7 @@ class DrupalIssueForkCommand extends BaseCommand
             ]);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = $this->getIO();
         if (!preg_match('#(?P<url>https://git.drupalcode.org/issue/(?P<project>.*)-\d+)/-/tree/(?P<branch>.*)$#', $input->getArgument('fork-url'), $matches)) {
