@@ -62,6 +62,9 @@ class DrupalIssueUnForkCommand extends DrupalIssueForkCommand
             'packages' => ["drupal/$project:~$version"],
             '--no-update' => true,
         ];
+        if (isset($config['require-dev']["drupal/$project"])) {
+          $args['--dev'] = TRUE;
+        }
         $this->getApplication()->run(new ArrayInput($args), $output);
         return 0;
     }
