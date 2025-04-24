@@ -50,7 +50,12 @@ class DrupalIssueForkCommand extends BaseCommand
         if (!$found) {
             $config['repositories'][] = $forkRepository;
         }
-        $config['require'][$project] = "dev-$branch";
+        if (isset($config['require-dev'][$project])) {
+          $config['require-dev'][$project] = "dev-$branch";
+        }
+        else {
+          $config['require'][$project] = "dev-$branch";
+        }
         $this->writeConfig($file, $config);
         $io->writeError('<info>'.$fileName.' has been updated</info>');
         return 0;
