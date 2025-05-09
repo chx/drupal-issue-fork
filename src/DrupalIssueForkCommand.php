@@ -31,10 +31,11 @@ class DrupalIssueForkCommand extends BaseCommand
             return 1;
         }
         ['project' => $project, 'url' => $url, 'branch' => $branch] = $matches;
+        $url .= '.git';
         $project = "drupal/$project";
         $forkRepository = [
             'type' => 'git',
-            'url' =>  "$url.git",
+            'url' =>  $url,
         ];
         $found = FALSE;
         $fileName = Factory::getComposerFile();
@@ -50,12 +51,17 @@ class DrupalIssueForkCommand extends BaseCommand
         if (!$found) {
             $config['repositories'][] = $forkRepository;
         }
-        if (isset($config['require-dev'][$project])) {
-          $config['require-dev'][$project] = "dev-$branch";
+        $constraint = "dev-$branch";
+        exec("git ls-remote -h $url", $output);
+        foreach ($output as $line) {
+            [$ref, $name] = explode("\t", $line);
+            if ($name === "refs/heads/$branch") {
+                $constraint .= "#$ref";
+                break;
+            }
         }
-        else {
-          $config['require'][$project] = "dev-$branch";
-        }
+        $key = isset($config['require-dev'][$project]) ? 'require-dev' : 'require';
+        $config[$key][$project] = $constraint;
         $this->writeConfig($file, $config);
         $io->writeError('<info>'.$fileName.' has been updated</info>');
         return 0;
